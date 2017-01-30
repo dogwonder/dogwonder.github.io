@@ -2,15 +2,39 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
+var modernizr = require('gulp-modernizr');
 var browserSync = require('browser-sync');
-var useref = require('gulp-useref');
 var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var pump = require('pump');
 var gulpIf = require('gulp-if');
 var cssnano = require('gulp-cssnano');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
 var del = require('del');
 var runSequence = require('run-sequence');
+var cheerio = require("gulp-cheerio");
+var svgstore = require('gulp-svgstore');
+var svgmin = require('gulp-svgmin');
+var path = require('path');
+var banner = require('gulp-banner');
+var plumber = require('gulp-plumber');
+var gutil = require('gulp-util');
+var pkg = require('./package.json');
+
+var comment = '/*\n' +
+    ' * Automatically Generated - DO NOT EDIT \n' +
+    ' * Generated on <%= new Date().toISOString().substr(0, 19) %> \n' +
+    ' * <%= pkg.name %> <%= pkg.version %>\n' +
+    ' * <%= pkg.description %>\n' +
+    ' * <%= pkg.homepage %>\n' +
+    ' *\n' +
+    ' * Copyright 2015, <%= pkg.author %>\n' +
+    ' * Released under the <%= pkg.license %> license.\n' +
+    '*/\n\n';
+
+
+
 
 // Basic Gulp task syntax
 gulp.task('hello', function() {
@@ -20,43 +44,94 @@ gulp.task('hello', function() {
 // Development Tasks
 // -----------------
 
-// Start browserSync server
-gulp.task('browserSync', function() {
-  browserSync({
-    server: {
-      baseDir: 'app'
+// Watchers
+gulp.task('watch', function() {
+  browserSync.init({
+    files: ['{lib,templates}/**/*.php', '*.php'],
+    proxy: "cyoa.dev",
+    snippetOptions: {
+      whitelist: ['/wp-admin/admin-ajax.php'],
+      blacklist: ['/wp-admin/**']
     }
-  })
+  });
+  gulp.watch('app/scss/**/*.scss', ['sass']);
+  gulp.watch('app/scripts/**/*.js', ['scripts'], browserSync.reload);
+  gulp.watch('app/icons/*.svg', ['svgstore'], browserSync.reload);
 })
 
+// Banner
+gulp.task('banner', function() {
+    gulp.src([
+      'dist/css/cyoa.css'
+    ])
+    .pipe(banner(comment, {
+        pkg: pkg
+    }))
+    .pipe(gulp.dest('dist/css'));
+});
+
 gulp.task('sass', function() {
-  return gulp.src('app/scss/app.scss') // Gets all files ending with .scss in app/scss and children dirs
-    .pipe(sass()) // Passes it through a gulp-sass
-    .pipe(gulp.dest('app/css')) // Outputs it in the css folder
+  return gulp
+    .src('app/scss/*.scss')
+    .pipe(plumber(function(error) {
+      // Output an error message
+      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
+      // emit the end event, to properly end the task
+      this.emit('end');
+    })
+    )
+    .pipe(sourcemaps.init())
+    .pipe(sass())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('dist/css')) // Outputs it in the css folder
     .pipe(browserSync.reload({ // Reloading with Browser Sync
       stream: true
     }));
 })
 
-// Watchers
-gulp.task('watch', function() {
-  gulp.watch('app/scss/**/*.scss', ['sass']);
-  gulp.watch('app/*.html', browserSync.reload);
-  gulp.watch('app/js/**/*.js', browserSync.reload);
-})
+gulp.task('sass-build', function () {
+  return gulp
+    .src('app/scss/*.scss')
+    .pipe(plumber(function(error) {
+      // Output an error message
+      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
+      // emit the end event, to properly end the task
+      this.emit('end');
+    })
+    )
+    .pipe(sass())
+    .pipe(cssnano({
+            autoprefixer: {browsers: ['> 1%', 'last 2 versions', 'Firefox >= 20']}
+    }))
+    .pipe(gulp.dest('dist/css'))
+});
+
+
+gulp.task('scripts', function (cb) {
+  pump([
+        gulp.src([
+          'app/vendor/cyoa-master/dist/cyoa.min.js',
+          'app/vendor/cyoa-master/js/tabletop.js',
+          'app/scripts/scripts.js'
+        ]),
+        concat('cyoa.js'),
+        uglify(),
+        gulp.dest('dist/scripts')
+    ],
+    cb
+  );
+});
+
+gulp.task('modernizr', function() {
+  gulp.src('dist/scripts/**/*.js')
+    .pipe(modernizr())
+    .pipe(uglify())
+    .pipe(gulp.dest("dist/scripts/modernizr"))
+});
+
 
 // Optimization Tasks
 // ------------------
-
-// Optimizing CSS and JavaScript
-gulp.task('useref', function() {
-
-  return gulp.src('app/*.html')
-    .pipe(useref())
-    .pipe(gulpIf('*.js', uglify()))
-    .pipe(gulpIf('*.css', cssnano()))
-    .pipe(gulp.dest('dist'));
-});
 
 // Optimizing Images
 gulp.task('images', function() {
@@ -68,11 +143,30 @@ gulp.task('images', function() {
     .pipe(gulp.dest('dist/images'))
 });
 
-// Copying fonts
-gulp.task('fonts', function() {
-  return gulp.src('app/fonts/**/*')
-    .pipe(gulp.dest('dist/fonts'))
+
+// Copying icons
+gulp.task('icons', function() {
+  return gulp.src('app/icons/**/*')
+    .pipe(gulp.dest('dist/icons'))
 })
+
+//SVGS
+gulp.task("svgstore", function () {
+    return gulp.src("app/icons/*.svg")
+   .pipe(svgmin())
+   .pipe(svgstore({
+     inlineSvg: true,
+    //  fileName: "sprite.svg",
+     prefix: "icon-"
+    }))
+    .pipe(cheerio({
+         run: function ($) {
+           $("[fill]").removeAttr("fill");
+    },
+         parserOptions: { xmlMode: true }
+    }))
+   .pipe(gulp.dest("dist/icons"));
+});
 
 // Cleaning
 gulp.task('clean', function() {
@@ -89,7 +183,7 @@ gulp.task('clean:dist', function() {
 // ---------------
 
 gulp.task('default', function(callback) {
-  runSequence(['sass', 'browserSync', 'watch'],
+  runSequence(['sass', 'scripts', 'svgstore', 'browserSync', 'watch'],
     callback
   )
 })
@@ -97,7 +191,7 @@ gulp.task('default', function(callback) {
 gulp.task('build', function(callback) {
   runSequence(
     'clean:dist',
-    ['sass', 'useref', 'images', 'fonts'],
+    ['sass-build', 'scripts', 'modernizr', 'images', 'icons'],
     callback
   )
 })
