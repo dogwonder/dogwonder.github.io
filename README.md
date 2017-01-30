@@ -7,5 +7,5 @@
 * https://digitalsynopsis.com/design/best-google-font-combinations-typeface-pairings/
 
 ## Commands
-gulp watch
-jekyll serve
+* gulp watch // gulp watch
+* jekyll serve // jekyll build
