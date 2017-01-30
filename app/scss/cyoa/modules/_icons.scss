@@ -1,0 +1,52 @@
+.defs-only {
+	position: absolute;
+	height: 0; width: 0;
+	overflow: none;
+	left: -100%;
+}
+
+.icon {
+     /* make it match the font-size */
+     width: 1rem;
+     height: 1rem;
+     /* make it match the text color */
+     fill: currentColor;
+     vertical-align: middle;
+}
+
+//Hamburger
+.icon-menu {
+  width: 2rem;
+  height: 2rem;
+}
+
+
+//Helper classes
+.fill--none {
+  fill:none;
+}
+
+//For arrows
+.stroke--rounded {
+  stroke:#FFFFFF;
+  stroke-width:0.4em;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/*One Custom Tones*/
+$swatches: (
+    "white": $white,
+    "black": $text-color,
+    "red": $cyoa-red,
+    "blue": $cyoa-blue
+);
+
+@each $swatch, $color in $swatches {
+    .fill--#{$swatch}  {
+      fill: $color;
+    }
+    .stroke--#{$swatch}  {
+      stroke: $color;
+    }
+}

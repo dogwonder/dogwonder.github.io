@@ -1,50 +1,56 @@
-//////////////////////////////
-// LAYOUT & GRID STYLES
-//////////////////////////////
-
-
 .row {
 	max-width:$global-width;
 }
 
-.cyoa-container {
-		margin:$margin;
+.banner {
+	padding:2rem;
 }
 
-.cyoa-masthead {
-	max-width:100%;
-	z-index: 1;
+.story {
+
+}
+
+.story__background {
+	position: fixed;
+	  top: -50%;
+	  left: -50%;
+	  width: 200%;
+	  height: 200%;
+		.story__background--img {
+			position: absolute;
+		 top: 0;
+		 left: 0;
+		 right: 0;
+		 bottom: 0;
+		 margin: auto;
+		 min-width: 50%;
+		 min-height: 50%;
+		}
+}
+
+.story__content {
 	position: relative;
-}
-
-
-
-.cyoa-footer {
-	text-align: center;
-	p {
-		font-size: rem-calc(12);
-		color:$cyoa-mid-grey;
-	}
-}
-
-
-.primary {
-	background-color:white;
-	padding:$margin;
 	z-index: 2;
-	position: relative;
-	overflow: hidden;
-}
-
-.-cta {
-	@media #{$medium-up} {
-		margin:($margin * 2) 0;
+	max-width:40rem;
+	margin:5rem auto;
+	//Contrasts
+	h1 {
+		color:inherit !important;
+	}
+	p {
+		color:inherit !important;
+		> a {
+			text-decoration: underline;
+			color:inherit !important;
+		}
 	}
 }
 
-/**
-* 7.0 - Accessibility
-*/
+.cyoa__footer {
+	font-size: rem-calc(14);
+}
+
+//Accessibility
 
 /* Text meant only for screen readers */
 .says,
@@ -89,61 +95,7 @@
 	z-index: 100000;
 }
 
-/**
-* Utility classes
-*/
-
-.-content-padding {
-	padding-left:.9375rem;
-	padding-right:.9375rem;
-}
-
-.-border-bottom {
-	border-bottom:1px solid $cyoa-border;
-}
-
-.-border-top {
-	border-top:1px solid $cyoa-border;
-}
-
-.-border-left {
-	@media #{$medium-up} {
-		border-left:1px solid $cyoa-border;
-	}
-}
-
-.-border-right {
-	@media #{$medium-up} {
-		border-right:1px solid $cyoa-border;
-	}
-}
-
-.-margin-bottom {
-	margin-bottom:$margin;
-}
-
-.-margin-top {
-	margin-top:$margin;
-}
-
-.-padding-bottom {
-	padding-bottom:$margin;
-}
-
-.-padding-top {
-	padding-top:$margin;
-}
-
-//Pagination
-.pagination {
-	margin:0 auto;
-	a {
-		display: inline-block;
-	}
-	.current {
-		background-color:$cyoa-red;
-	}
-}
+//Utility classes
 
 //Accessibility
 .show-on-focus {

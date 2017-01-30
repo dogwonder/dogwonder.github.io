@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Colorify.js</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/prism.css">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="shortcut icon" type="image/png" href="favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Colorify is a script written in Javascript, that allows you to extract colors from images, and manipulates them."/>
+  <meta property="fb:app_id" content="966242223397117">
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Colorify.js - The simple, customizable, tiny javascript color extractor" />
+  <meta property="og:description" content="Colorify is a script written in Javascript, that allows you to extract colors from images, and manipulates them." />
+  <meta property="og:url" content="http://colorify.rocks" />
+  <meta property="og:site_name" content="colorify.js" />
+  <meta property="og:image" content="http://colorify.rocks/images/og_image.png">
+</head>
+
+<!-- 
+Cover photos by order : 
+https://www.flickr.com/photos/50122097@N00/4236749844
+https://www.flickr.com/photos/67961268@N00/283994079
+https://www.flickr.com/photos/80547277@N00/365570308
+https://www.flickr.com/photos/34409164@N06/3618324994
+https://www.flickr.com/photos/56053592@N00/6166620122
+-->
+
+<body id="body">
+  <div id="minHeader">
+    <header class="hero-header">
+      <h2><span>C</span><span>o</span><span>l</span><span>o</span><span>r</span><span>i</span><span>f</span><span>y</span><span>.</span><span>j</span><span>s</span></h2>
+    </header>
+
+    <div class="colors"></div>
+  </div>
+  <nav>
+    <div class="control">
+      <a href="#" id="closeNav"><span class="icon -close"><<</span></a>
+    </div>
+    <div class="menu">
+     <header class="hero-header">
+      <h1><span>C</span><span>o</span><span>l</span><span>o</span><span>r</span><span>i</span><span>f</span><span>y</span><span>.</span><span>j</span><span>s</span></h1>
+    </header>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#documentation">Documentation</a>
+        <ul class="doc">
+          <li><a href="index.html#installation">Installation</a></li>
+          <li><a href="index.html#defaultConfig">Default config</a></li>
+          <li><a href="index.html#loadImagesDynamically">Load images dynamically</a></li>
+          <li><a href="index.html#getMainColor">Get main color</a></li>
+          <li><a href="index.html#getGradient">Get Gradient</a></li>
+          <li><a href="index.html#lazyReveal">Lazy-reveal</a></li>
+          <li><a href="index.html#displayOnEvent">Display on event</a></li>
+          <li><a href="index.html#manipulatesColor">Manipulates color</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#api">API</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li class="bottom">
+        <li><a href="https://github.com/LukyVj/Colorify.js">Github</a></li>
+        <li><a href="about.html">About</a></li>
+      </li>
+    </ul>
+
+    <footer>
+      <div class="share">
+        <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="lukyvj" data-size="large" data-hashtags="colorifyJs">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </div>
+      <span class="icon -tools">Made</span> with <span class="icon -love">♥</span> by <a href="http://twitter.com/lukyvj"><strong><span>@</span><span>L</span><span>u</span><span>k</span><span>y</span><span>V</span><span>j</span></strong></a>
+    </footer>
+  </div>
+
+
+</nav>
+
+<header id="header" class="">
+  <span class="orange-block"></span>
+  <span class="red-block"></span>
+  <span class="purple-block"></span>
+  <span class="blue-block"></span>
+  <span class="green-block"></span>
+
+  <div class="hero-header">
+    <div class="hero-title">
+      <h1>Colorify.js</h1>
+      <h2>About</h2>
+
+    </div>
+  </div>
+</header>
+
+
+
+<div class="content">
+  <div id="about">
+    <div class="alert">
+      Thank you
+    </div>
+    <p>This project was made by <a href="http://twitter.com/lukyvj"  target="_blank">@LukyVj</a>, with the help of some awesome folks :</p>
+    <ul>
+     <li><a href="https://github.com/hadrienl/"  target="_blank">Hadrien Lanneau</a></li>
+     <li><a href="https://demont.is/"  target="_blank">Felix de Montis</a></li>
+     <li><a href="http://sethmcleod.com/"  target="_blank">Seth Mcleod</a></li>
+   </ul>
+
+   <p>A huge thank you to <a href="http://www.gradifycss.com/">Gradify</a> for the inspiration, and the frustration.</p>
+   <p>I was frustrated because I couldn't use the JS version of Gradify, so I decided to give a try, and to code my own</p>
+
+
+   <div class="alert">
+     Version
+   </div>
+
+   <p>This version is the version <code>1.0.1</code></p>
+
+    <div class="alert">
+      License
+    </div>
+    <p>This project is licensed under <a href="http://www.isc.org/downloads/software-support-policy/isc-license/" target="_blank">ISC</a></p>
+
+ </div>
+</div>
+
+<script src="scripts/app.js"></script>
+
+<script src="src/colorify.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42634383-4', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

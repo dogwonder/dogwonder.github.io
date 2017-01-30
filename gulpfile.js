@@ -110,8 +110,10 @@ gulp.task('sass-build', function () {
 gulp.task('scripts', function (cb) {
   pump([
         gulp.src([
-          'app/vendor/cyoa-master/dist/cyoa.min.js',
-          'app/vendor/cyoa-master/js/tabletop.js',
+          'app/vendor/stories/markdown.js',
+          'app/vendor/stories/story.js',
+          'app/vendor/stories/adventure.js',
+          'app/vendor/colorify/scripts/colorify.min.js',
           'app/scripts/scripts.js'
         ]),
         concat('cyoa.js'),

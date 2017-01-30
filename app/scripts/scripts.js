@@ -19,34 +19,6 @@ function rgb2hex(rgb) {
 }
 
 
-(function(jQuery) {
-    jQuery.fn.upUpDownDown = function(o){
-        var options = jQuery.extend({
-                                        watchFor : [38,38,40,40,37,39,37,39,66,65],
-                                        callback : function() { }
-                                    }, o);
-
-        var key_accum = [];
-        var match = options.watchFor;
-
-        jQuery(document).keyup(function(e){
-            len = key_accum.push(e.keyCode ? e.keyCode : e.charCode);
-
-            if(len > match.length) key_accum.shift();
-
-            if (key_accum.join('-') == match.join('-'))
-            {
-                key_accum = [];
-                if (options.callback)
-                {
-                    options.callback(jQuery(this));
-                }
-            }
-        });
-    }
-})(jQuery);
-
-
 var cyoa = {
   initExternalLinks: function() {
         jQuery('a[rel*=external]').click( function() {
@@ -68,55 +40,34 @@ var cyoa = {
             }
           });
     },
-    initContrast: function() {
-            jQuery(".has-backgroundcolour").each(function(){
-             var currentBackground = jQuery(this).css("background-color");
-             var currentBackground  = rgb2hex(currentBackground);
-             var newColor = getContrastYIQ(currentBackground);
-             jQuery(this).css("color",newColor);
-            });
-    },
-    initKonami: function() {
-        jQuery('body').upUpDownDown({
-            watchFor: [38,38,40,40,37,39,37,39,66,65],
-            callback: function(){
-                    jQuery('body').append('<img src="/imgs/cat.png" alt="" style="position:fixed; bottom:-1275px; left:0; " class="kcode" />');
-                    jQuery('.kcode').stop()
-                        .animate({ bottom : -20 ,left : 0 },200)
-                        .animate({ bottom : -40 ,left : 50 },200)
-                        .animate({ bottom : -20 ,left :  100 },200)
-                        .animate({ bottom : -40 ,left :  150 },200)
-                        .animate({ bottom : -20 ,left :  200 },200)
-                        .animate({ bottom : -40 ,left :  250 },200)
-                        .animate({ bottom : -20 ,left :  300 },200)
-                        .animate({ bottom : -40 ,left : 350 },200)
-                        .animate({ bottom : -20 ,left :  400 },200)
-                        .animate({ bottom : -40 ,left : 450 },200)
-                        .animate({ bottom : -20 ,left :  500 },200)
-                        .animate({ bottom : -40 ,left : 550 },200)
-                        .animate({ bottom : -20 ,left :  600 },200)
-                        .animate({ bottom : -40 ,left : 650 },200)
-                        .animate({ bottom : -20 ,left :  700 },200)
-                        .animate({ bottom : -40 ,left : 750 },200)
-                        .animate({ bottom : -20 ,left :  800 },200)
-                        .animate({ bottom : -40 ,left : 850 },200)
-                        .animate({ bottom : -20 ,left :  900 },200)
-                        .animate({  bottom : -1275 ,left : 900},600,
-                          function(){
-                                jQuery(this).remove();
-                              });
-            }
+
+    initColorify: function() {
+        colorify({
+          container: 'colorify-main-color',
+          accuracy: 10,
+          give: {
+            property: 'background-color',
+            target: '.story'
+          }
         });
+    },
+
+    initContrast: function() {
+      var currentBackground = jQuery('.story').css("background-color");
+      var currentBackground  = rgb2hex(currentBackground);
+      var newColor = getContrastYIQ(currentBackground);
+      jQuery('.story').css("color",newColor);
     }
+
 }
 
 jQuery(document).ready(function() {
     //Utlitities
     cyoa.initExternalLinks();
     cyoa.initSmoothScroll();
-    cyoa.initContrast();
-
-    //The magic
-    cyoa.initKonami();
-
+    cyoa.initColorify();
  });
+
+jQuery(window).load(function(){
+    cyoa.initContrast();
+});

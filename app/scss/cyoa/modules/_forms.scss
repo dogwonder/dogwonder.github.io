@@ -20,7 +20,7 @@ textarea {
     color: $text-color;
 }
 .user-form div,
-.rm-field {
+.cya-field {
   position: relative;
   clear:both;
   padding:5px 0;
@@ -28,7 +28,7 @@ textarea {
   background-color:$white;
   border:1px solid $cyoa-border;
 }
-.rm-form label {
+.cya-form label {
   &.no-abs {
     position: relative;
     left:auto;
