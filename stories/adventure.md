@@ -5,6 +5,8 @@
 
 For more information, visit the [GitHub page for Adventure](https://github.com/Ubersmake/Adventure), or read the [Help story](?story=help).
 
+![alt text](dist/images/backgrounds/picfair-261508709-starscape.jpg "Logo Title Text 1")
+
 [Continue.](choice:The Boiling Pot)
 
 # The Boiling Pot

@@ -71,3 +71,8 @@ jQuery(document).ready(function() {
 jQuery(window).load(function(){
     cyoa.initContrast();
 });
+
+// jQuery(document).on("click", "#content a", function(event) {
+//   cyoa.initColorify();
+//   cyoa.initContrast();
+// });

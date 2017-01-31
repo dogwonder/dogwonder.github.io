@@ -6,9 +6,6 @@ var choices = [];
 var source;
 var filesSupported;
 
-var type = "serif";
-var theme = "light";
-
 // Initialize Adventure.
 $(document).ready(function() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -24,40 +21,19 @@ $(document).ready(function() {
     // Handler for Choices.
     $(document).on("click", "#content a", function(event) {
         var choice = $(this).attr("choice");
+        var choiceName = choice.replace(/\s+/g, '-').toLowerCase();
         if (choice) {
             choices.push(choice);
             currentSection = choice;
             displaySection(choice);
         }
-    });
-
-    // Handlers for Type and Theme menus.
-    $("#type").change(function() {
-        type = $("#type option:selected").val();
-        // Content must be refreshed to apply a new type.
-        // Monospace requires removal of heading tags.
-        // Non-monospace requires re-application of headings.
-        displaySection(currentSection);
-    });
-
-    // $("#theme").change(function() {
-    //     theme = $("#theme option:selected").val();
-    //     applyTheme(theme);
-    // });
-
-    // Handler for edit link
-    $(document).on("click", "#header #options #edit", function(event) {
-        event.preventDefault();
-        toggleEditor();
-    });
-
-    // Handler for load link
-    if (filesSupported) {
-        $("#header #options #load").css("visibility", "visible");
-        $(document).on("change", "#header #options #load", function(event) {
-            loadStoryFromFile(event);
+        $('#coya').attr('data-story', '');
+        $('#coya').attr('data-story', choiceName);
+        $('.story__background img').attr('src', 'dist/images/backgrounds/default.jpg');
+        $('.story__background img').attr('src',function(i,e){
+          return $(this).attr('src').replace('default.jpg',choiceName + '.jpg');
         });
-    }
+    });
 
     // "Back" handlers.
     window.onbeforeunload = function() {
@@ -87,8 +63,6 @@ function displaySection(name) {
     $("#content").html(html.trim());
     // Remove empty tags left behind from decision rendering.
     $("#content :empty").remove();
-    applyType(type);
-    // applyTheme(theme);
 }
 
 function displayDecisions(html) {
@@ -124,100 +98,6 @@ function displayDecisions(html) {
     }
 
     return scaffold.innerHTML;
-}
-
-function applyType(type) {
-    if (type === "serif") {
-        // $("#content").css("font-family", "Garamond, Palatino, Times, serif");
-    } else if (type === "sans") {
-        // $("#content").css("font-family", "Arial, Helvetica, sans-serif");
-    } else if (type === "mono") {
-        // Strip out headings and replace with something comparable when using
-        // a monospaced style.
-        var content = $("#content").html();
-
-        content = content.replace(/<h1>(.+)<\/h1>/, "<strong>$1</strong></p>");
-        content = content.replace(/<h2>(.+)<\/h2>/, "<strong>$1</strong></p>");
-        content = content.replace(/<h3>(.+)<\/h3>/, "<strong>$1</strong></p>");
-        content = content.replace(/<h4>(.+)<\/h4>/, "<strong>$1</strong></p>");
-        content = content.replace(/<h5>(.+)<\/h5>/, "<strong>$1</strong></p>");
-        content = content.replace(/<h6>(.+)<\/h6>/, "<strong>$1</strong></p>");
-
-        $("#content").html(content.trim());
-
-        // $("#content").css("font-family", "'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace");
-    }
-}
-
-// Editor functions
-function initializeEditor() {
-    // Make the editor useful.
-    $("#writer").bind("input propertychange", function() {
-        window.clearTimeout($(this).data("timeout"));
-
-        // Make the editor less brittle for long stories.
-        $(this).data("timeout", setTimeout(function () {
-            updateEditor();
-        }, 500));
-    });
-
-    // Add the source to the editor.
-    $("#writer").text(source);
-
-    // Handler for publish link.
-    $(document).on("click", "#editor #links #publish", function(event) {
-        event.preventDefault();
-        publishEditorSource();
-    });
-
-    // Handler for download link.
-    $(document).on("click", "#editor #links #download", function(event) {
-        event.preventDefault();
-        downloadEditorSource();
-    });
-}
-
-function toggleEditor() {
-    if ($("#editor").is(":visible")) {
-        $("#content").css("width", "100%");
-        $("#editor").hide();
-    } else {
-        $("#content").css("width", "50%");
-        $("#editor").show();
-    }
-}
-
-function updateEditor() {
-    source = $("#writer").val();
-    parseSource(source);
-    displaySection(currentSection);
-}
-
-function publishEditorSource() {
-    var element = document.createElement('a');
-
-    element.setAttribute('href', 'data:application/javascript;charset=utf-8,' +
-        encodeURIComponent("var story = ") +
-        encodeURIComponent(JSON.stringify(source)) +
-        encodeURIComponent(";"));
-    element.setAttribute('download', "story.js");
-    element.style.display = 'none';
-
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}
-
-function downloadEditorSource() {
-    var element = document.createElement('a');
-
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(source));
-    element.setAttribute('download', title + ".md");
-    element.style.display = 'none';
-
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
 }
 
 // Core (Parser) functions.
@@ -257,7 +137,6 @@ function initializeStory(data) {
 
     // Do this here. Don't grab the source twice.
     source = data;
-    initializeEditor();
 }
 
 function loadStoryFromFile(event) {

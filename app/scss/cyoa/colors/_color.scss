@@ -1,6 +1,4 @@
-//////////////////////////////
-// COLORS
-//////////////////////////////
+// Colors
 $themes: (
     "white": $white,
     "black": $black,
@@ -25,24 +23,12 @@ $themes: (
     border-color: $text-color;
   }
 }
-//////////////////////////////
-// THEMES
-//////////////////////////////
 
+//Themes
 // Generate a class for each color of each color palette
 @each $theme, $color in $themes {
       .theme--#{$theme}  {
-          .rm-masthead {
-            // border-top: $border-height solid $color;
-          }
-          .btn-solid {
-            background-color: $color;
-            @include text-contrast($color);
-          }
-      }
-      .bg-#{$theme} {
-        background-color: $color;
-        h2, p, p>a {
+        h1, h2, p, p>a {
           @include text-contrast($color);
         }
       }

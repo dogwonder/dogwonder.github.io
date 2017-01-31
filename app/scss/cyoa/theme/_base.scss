@@ -2,14 +2,6 @@
 	max-width:$global-width;
 }
 
-.banner {
-	padding:2rem;
-}
-
-.story {
-
-}
-
 .story__background {
 	position: fixed;
 	  top: -50%;
@@ -46,8 +38,17 @@
 	}
 }
 
-.cyoa__footer {
+.footer {
+	width:100%;
+	padding:1rem;
+	position:fixed;
+	bottom:0;
 	font-size: rem-calc(14);
+	color:white;
+	text-align: center;
+	z-index: 2;
+	opacity: 0.7;
+
 }
 
 //Accessibility

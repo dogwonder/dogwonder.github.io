@@ -62,13 +62,11 @@
 // icons (inputs & labels)
 @import "cyoa/modules/icons";
 
-//////////////////////////////
-// THEME
-//////////////////////////////
+// theme
 @import "cyoa/theme/base";
 
-//////////////////////////////
-// CUSTOM
-//////////////////////////////
+//story
+@import "cyoa/theme/stories";
 
+//color
 @import "cyoa/colors/color";
