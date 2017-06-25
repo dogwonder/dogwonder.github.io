@@ -9,3 +9,5 @@
 ## Commands
 * gulp watch // gulp watch
 * jekyll serve // jekyll build
+
+##Other
